@@ -86,6 +86,87 @@ func main() {
 				},
 			},
 		},
+
+		{
+			Name: "item",
+			Subcommands: []cli.Command{
+				{
+					Name:  "list",
+					Usage: "list all items under a project",
+					Action: func(c *cli.Context) error {
+						dat, _ := ioutil.ReadFile("config")
+						client := togoist.NewClient(string(dat))
+						client.Sync()
+
+						w := new(tabwriter.Writer)
+						w.Init(os.Stdout, 8, 8, 0, '\t', 0)
+						defer w.Flush()
+
+						fmt.Fprintf(w, "\n %s\t%s\t", "Id", "Content")
+						fmt.Fprintf(w, "\n %s\t%s\t", "--", "-------")
+
+						for _, itm := range client.Items {
+							if (c.Int64("projectid") == itm.ProjectId) {
+								fmt.Fprintf(w, "\n %v\t%s\t", itm.Id, itm.Content)
+							}
+						}
+
+						return nil
+					},
+					Flags: []cli.Flag{
+						cli.Int64Flag{
+							Name: "projectid, p",
+						},
+					},
+				},
+
+				{
+					Name:  "add",
+					Usage: "add an item to a project",
+					Action: func(c *cli.Context) error {
+						dat, _ := ioutil.ReadFile("config")
+						client := togoist.NewClient(string(dat))
+						client.Sync()
+						
+						client.AddItem(c.Int64("projectid"), c.String("content"), c.Int("indent"))
+
+						return nil
+					},
+					Flags: []cli.Flag{
+						cli.Int64Flag{
+							Name: "projectid, p",
+						},
+						cli.StringFlag{
+							Name: "content, c",
+						},
+						cli.IntFlag{
+							Name:  "indent, i",
+							Value: 1,
+						},
+					},
+				},
+
+				{
+					Name:  "delete",
+					Usage: "delete an item from a project",
+					Action: func(c *cli.Context) error {
+						dat, _ := ioutil.ReadFile("config")
+						client := togoist.NewClient(string(dat))
+						client.Sync()
+						
+						ids := []int64{c.Int64("id")}
+						client.DeleteItems(ids)
+
+						return nil
+					},
+					Flags: []cli.Flag{
+						cli.Int64Flag{
+							Name: "id",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	sort.Sort(cli.FlagsByName(app.Flags))
