@@ -165,6 +165,26 @@ func main() {
 						},
 					},
 				},
+
+				{
+					Name:  "complete",
+					Usage: "complete an item in a project",
+					Action: func(c *cli.Context) error {
+						dat, _ := ioutil.ReadFile("config")
+						client := togoist.NewClient(string(dat))
+						client.Sync()
+						
+						ids := []int64{c.Int64("id")}
+						client.CompleteItems(ids)
+
+						return nil
+					},
+					Flags: []cli.Flag{
+						cli.Int64Flag{
+							Name: "id",
+						},
+					},
+				},
 			},
 		},
 	}
