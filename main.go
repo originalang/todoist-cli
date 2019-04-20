@@ -105,7 +105,7 @@ func main() {
 						fmt.Fprintf(w, "\n %s\t%s\t", "--", "-------")
 
 						for _, itm := range client.Items {
-							if (c.Int64("projectid") == itm.ProjectId) {
+							if c.Int64("projectid") == itm.ProjectId {
 								fmt.Fprintf(w, "\n %v\t%s\t", itm.Id, itm.Content)
 							}
 						}
@@ -126,7 +126,7 @@ func main() {
 						token := os.Getenv("TODOIST_TOKEN")
 						client := togoist.NewClient(string(token))
 						client.Sync()
-						
+
 						client.AddItem(c.Int64("projectid"), c.String("content"), c.Int("indent"))
 
 						return nil
@@ -152,7 +152,7 @@ func main() {
 						token := os.Getenv("TODOIST_TOKEN")
 						client := togoist.NewClient(string(token))
 						client.Sync()
-						
+
 						ids := []int64{c.Int64("id")}
 						client.DeleteItems(ids)
 
@@ -172,7 +172,7 @@ func main() {
 						token := os.Getenv("TODOIST_TOKEN")
 						client := togoist.NewClient(string(token))
 						client.Sync()
-						
+
 						ids := []int64{c.Int64("id")}
 						client.CompleteItems(ids)
 
