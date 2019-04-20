@@ -115,7 +115,7 @@ func main() {
 								if itm.Indent == 1 {
 									fmt.Printf("\n %s %s [%v]", "⌲", itm.Content, itm.Id)
 								} else {
-									if itm.Checked {
+									if itm.Checked == 1 {
 										fmt.Printf("\n    %s└── [X] %s [%v]", strings.Repeat("\t", itm.Indent-2), itm.Content, itm.Id)
 									} else {
 										fmt.Printf("\n    %s└── [ ] %s [%v]", strings.Repeat("\t", itm.Indent-2), itm.Content, itm.Id)
@@ -148,7 +148,7 @@ func main() {
 							return err
 						}
 
-						client.AddItem(projId, c.String("content"), c.Int("indent"))
+						client.AddItem(projId, c.String("content"), c.Int("indent"), c.String("duedate"))
 
 						return nil
 					},
@@ -163,6 +163,10 @@ func main() {
 						cli.IntFlag{
 							Name:  "indent, i",
 							Value: 1,
+						},
+						cli.StringFlag{
+							Name:  "duedate, d",
+							Value: "tomorrow",
 						},
 					},
 				},
