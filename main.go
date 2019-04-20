@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 	"text/tabwriter"
 
 	"github.com/originalang/togoist"
@@ -97,16 +98,14 @@ func main() {
 						client := togoist.NewClient(string(token))
 						client.Sync()
 
-						w := new(tabwriter.Writer)
-						w.Init(os.Stdout, 8, 8, 0, '\t', 0)
-						defer w.Flush()
-
-						fmt.Fprintf(w, "\n %s\t%s\t", "Id", "Content")
-						fmt.Fprintf(w, "\n %s\t%s\t", "--", "-------")
-
 						for _, itm := range client.Items {
 							if c.Int64("projectid") == itm.ProjectId {
-								fmt.Fprintf(w, "\n %v\t%s\t", itm.Id, itm.Content)
+								if itm.Indent == 1 {
+									fmt.Printf("\n %s %s [%v]", "⌲", itm.Content, itm.Id)
+								} else {
+									fmt.Printf("\n    %s└── %s [%v]", strings.Repeat("\t", itm.Indent - 2), itm.Content, itm.Id)
+								}
+								
 							}
 						}
 
