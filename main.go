@@ -73,14 +73,20 @@ func main() {
 						client := togoist.NewClient(string(token))
 						client.Sync()
 
-						ids := []int64{c.Int64("id")}
+						id, err := togoist.GetProjectId(client, c.String("name"))
+
+						if err != nil {
+							return err
+						}
+
+						ids := []int64{id}
 						client.DeleteProjects(ids)
 
 						return nil
 					},
 					Flags: []cli.Flag{
-						cli.Int64Flag{
-							Name: "id",
+						cli.StringFlag{
+							Name: "name, n",
 						},
 					},
 				},
@@ -98,22 +104,28 @@ func main() {
 						client := togoist.NewClient(string(token))
 						client.Sync()
 
+						id, err := togoist.GetProjectId(client, c.String("name"))
+
+						if err != nil {
+							return err
+						}
+
 						for _, itm := range client.Items {
-							if c.Int64("projectid") == itm.ProjectId {
+							if id == itm.ProjectId {
 								if itm.Indent == 1 {
 									fmt.Printf("\n %s %s [%v]", "⌲", itm.Content, itm.Id)
 								} else {
-									fmt.Printf("\n    %s└── %s [%v]", strings.Repeat("\t", itm.Indent - 2), itm.Content, itm.Id)
+									fmt.Printf("\n    %s└── %s [%v]", strings.Repeat("\t", itm.Indent-2), itm.Content, itm.Id)
 								}
-								
+
 							}
 						}
 
 						return nil
 					},
 					Flags: []cli.Flag{
-						cli.Int64Flag{
-							Name: "projectid, p",
+						cli.StringFlag{
+							Name: "name, n",
 						},
 					},
 				},
@@ -126,13 +138,20 @@ func main() {
 						client := togoist.NewClient(string(token))
 						client.Sync()
 
-						client.AddItem(c.Int64("projectid"), c.String("content"), c.Int("indent"))
+						projId, err := togoist.GetProjectId(client, c.String("projectname"))
+
+						if err != nil {
+							return err
+						}
+
+						client.AddItem(projId, c.String("content"), c.Int("indent"))
 
 						return nil
 					},
 					Flags: []cli.Flag{
-						cli.Int64Flag{
-							Name: "projectid, p",
+						cli.StringFlag{
+							Name:  "projectname, n",
+							Value: "Inbox",
 						},
 						cli.StringFlag{
 							Name: "content, c",
