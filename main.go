@@ -115,7 +115,11 @@ func main() {
 								if itm.Indent == 1 {
 									fmt.Printf("\n %s %s [%v]", "⌲", itm.Content, itm.Id)
 								} else {
-									fmt.Printf("\n    %s└── %s [%v]", strings.Repeat("\t", itm.Indent-2), itm.Content, itm.Id)
+									if itm.Checked {
+										fmt.Printf("\n    %s└── [X] %s [%v]", strings.Repeat("\t", itm.Indent-2), itm.Content, itm.Id)
+									} else {
+										fmt.Printf("\n    %s└── [ ] %s [%v]", strings.Repeat("\t", itm.Indent-2), itm.Content, itm.Id)
+									}
 								}
 
 							}
