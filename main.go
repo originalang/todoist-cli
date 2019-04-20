@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"sort"
@@ -23,8 +22,8 @@ func main() {
 					Name:  "list",
 					Usage: "list projects",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 
 						w := new(tabwriter.Writer)
@@ -46,8 +45,8 @@ func main() {
 					Name:  "add",
 					Usage: "add a new project",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 						client.AddProject(c.String("name"), c.Int("indent"))
 
@@ -69,8 +68,8 @@ func main() {
 					Name:  "delete",
 					Usage: "delete a project",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 
 						ids := []int64{c.Int64("id")}
@@ -94,8 +93,8 @@ func main() {
 					Name:  "list",
 					Usage: "list all items under a project",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 
 						w := new(tabwriter.Writer)
@@ -124,8 +123,8 @@ func main() {
 					Name:  "add",
 					Usage: "add an item to a project",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 						
 						client.AddItem(c.Int64("projectid"), c.String("content"), c.Int("indent"))
@@ -150,8 +149,8 @@ func main() {
 					Name:  "delete",
 					Usage: "delete an item from a project",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 						
 						ids := []int64{c.Int64("id")}
@@ -170,8 +169,8 @@ func main() {
 					Name:  "complete",
 					Usage: "complete an item in a project",
 					Action: func(c *cli.Context) error {
-						dat, _ := ioutil.ReadFile("config")
-						client := togoist.NewClient(string(dat))
+						token := os.Getenv("TODOIST_TOKEN")
+						client := togoist.NewClient(string(token))
 						client.Sync()
 						
 						ids := []int64{c.Int64("id")}
