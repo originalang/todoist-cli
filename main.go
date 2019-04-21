@@ -199,8 +199,16 @@ func main() {
 						client := togoist.NewClient(string(token))
 						client.Sync()
 
-						ids := []int64{c.Int64("id")}
-						client.CompleteItems(ids)
+						parentId := c.Int64("id")
+						children := togoist.GetChildrenIds(client, parentId)
+
+						if children != nil  {
+							client.CompleteItems(children, true)
+							client.CompleteItems([]int64{parentId}, false)
+						} else {
+							ids := []int64{c.Int64("id")}
+							client.CompleteItems(ids, false)
+						}
 
 						return nil
 					},
