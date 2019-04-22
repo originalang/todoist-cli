@@ -22,3 +22,27 @@ This will save an executable file in the `$GOPATH/bin` directory. Make sure that
 1. Login to your [todoist](https://todoist.com/) account
 2. Navigate to [this](https://todoist.com/prefs/integrations) page and follow the instructions to issue a new API token
 3. Create a new environment variable called `TODOIST_TOKEN` and set it to your API token
+
+## Usage
+
+For detailed usage instructions, use the ```-h``` flag with the relevant command
+
+### Project Commands
+
+Retrieve a list of user projects:
+
+```
+$ todoist-cli project list 
+```
+
+Add a new project:
+
+```
+$ todoist-cli project add -n "New Project"
+```
+
+Delete a project:
+
+```
+$ todoist-cli project delete -n "Project_Name"
+```
